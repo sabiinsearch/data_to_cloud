@@ -12,7 +12,7 @@ typedef struct {
 
      connectionManager* conManager;     
      
-     // float prev_hum;
+        bool publish_check;
      // float prev_temp;
      // float prev_load;
      // float load_threshold;
@@ -30,6 +30,7 @@ void setBoardWithLC(appManager*);
 void getSensorData_print_update(appManager*);
 void loop_mgr(appManager*);
 void getGPSdata(appManager* appMgr);
+void displayInfo(appManager* appMgr);
 
 
 // functions to set LEDs as per status

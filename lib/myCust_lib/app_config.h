@@ -10,7 +10,7 @@
 #define LOAD_Demo      100
 
 //
-#define UNIQUE_ID "container_004"  // change this for each device
+#define UNIQUE_ID "device_001"  // change this for each device
 // For Load Cell
 #define CALIBRATION_FACTOR_LOADCELL 2230 // this calibration factor is adjusted according to my load cell
 
@@ -19,11 +19,11 @@
     #define THINGNAME               "GPS_Device"        // Change this
     #define WIFI_SSID               "hukam"                    //change this
     #define WIFI_PASSWORD           "guest@13"                 //change this
-    #define AWS_ENDPOINT            "a3txmb12xz0kci-ats.iot.ap-south-1.amazonaws.com"   // AWS MQTT Broker URL  
-    #define AWS_IOT_PUBLISH_TOPIC   "container/sensors/data"           //change this
-    #define AWS_IOT_SUBSCRIBE_TOPIC "container/sensors/cmd"           //change this
+    #define AWS_ENDPOINT            "am2i6420agb0f-ats.iot.ap-south-1.amazonaws.com"   // AWS MQTT Broker URL  
+    #define AWS_IOT_PUBLISH_TOPIC   "Device/GPS_data_frm"           //change this
+    #define AWS_IOT_SUBSCRIBE_TOPIC "Device/GPS_data_to"           //change this
 
-    #define PUBLILISH_INTERVAL  600 
+    #define PUBLILISH_INTERVAL  2000 
     #define TIMEOUT_INTERVAL    120       // seconds
-    #define DISPLAY_TIME        10000      // milliseconds
+    #define DISPLAY_TIME        10000      // milliseconds  
 #endif

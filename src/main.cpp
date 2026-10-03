@@ -4,6 +4,7 @@
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 #include "WiFi.h"
+#include "app_config.h"     // for Custom Configration
 
 // Others
 //#include <TinyGPSPlus.h>
@@ -13,6 +14,7 @@
 #include "receiverBoard.h"
 #include "sensor.h"
 
+int publish_counter=0;
 // my Managers
 appManager managr;
 
@@ -36,14 +38,25 @@ void setup()
   appManager_ctor(&managr);
   
   Serial.println("All Systems Initialized..");
-
  
 }
 
 void loop()
 {
     
-  getSensorData_print_update(&managr);
+ // getSensorData_print_update(&managr);
+   if(1) {
+      publish_counter++;
+      managr.publish_check = false;
+   } else {
+      publish_counter = 0;
+      managr.publish_check = true;
+   }
+   getGPSdata(&managr);
+   
+  
+  
   loop_mgr(&managr);
-  delay(100);
+  Serial.println(F("==>> in loop() : main.cpp"));
+  delay(1000);
 }
