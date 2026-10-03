@@ -45,13 +45,15 @@ void loop()
 {
     
  // getSensorData_print_update(&managr);
-   if(1) {
-      publish_counter++;
-      managr.publish_check = false;
-   } else {
-      publish_counter = 0;
+   if(publish_counter>PUBLILISH_INTERVAL) {      
       managr.publish_check = true;
+      publish_counter = 0;
+   } else {
+      
+      managr.publish_check = false;
    }
+   publish_counter++;
+   
    getGPSdata(&managr);
    
   

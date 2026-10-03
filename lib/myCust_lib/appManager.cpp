@@ -175,11 +175,11 @@ void initRGB(){
 
            connectAWS(appMgr->conManager); 
       }
-        // if (appMgr->publish_check) {
+        if (appMgr->publish_check) {
          publishOnMqtt(jsonBuffer, appMgr->conManager);
          Serial.print("Published : ");
          Serial.println(appMgr->publish_check);
-         
+        } 
 }
 
  void getGPSdata(appManager* appMgr) {
