@@ -23,7 +23,7 @@
     #define AWS_IOT_PUBLISH_TOPIC   "Device/GPS_data_frm"           //change this
     #define AWS_IOT_SUBSCRIBE_TOPIC "Device/GPS_data_to"           //change this
 
-    #define PUBLILISH_INTERVAL  2000 
+    #define PUBLILISH_INTERVAL  180       // seconds
     #define TIMEOUT_INTERVAL    120       // seconds
     #define DISPLAY_TIME        10000      // milliseconds  
 #endif

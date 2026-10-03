@@ -181,6 +181,7 @@ void initRGB(){
         } 
                  Serial.print("Published : ");
          Serial.println(appMgr->publish_check);
+        
 }
 
 

@@ -53,6 +53,8 @@ void loop()
       managr.publish_check = false;
    }
    publish_counter++;
+   Serial.print("Publish Counter : ");
+   Serial.println(publish_counter);
 
    getGPSdata(&managr);
    
