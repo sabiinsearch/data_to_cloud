@@ -177,10 +177,13 @@ void initRGB(){
       }
         if (appMgr->publish_check) {
          publishOnMqtt(jsonBuffer, appMgr->conManager);
-         Serial.print("Published : ");
-         Serial.println(appMgr->publish_check);
+
         } 
+                 Serial.print("Published : ");
+         Serial.println(appMgr->publish_check);
 }
+
+
 
  void getGPSdata(appManager* appMgr) {
   // Read incoming data from GPS module
