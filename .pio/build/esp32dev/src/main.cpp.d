@@ -233,7 +233,7 @@
  C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/mbedtls/port/include/aes/esp_aes.h \
  C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/hal/include/hal/aes_types.h \
  C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/mbedtls/mbedtls/include/mbedtls/error.h \
- .pio/libdeps/esp32dev/PubSubClient/src/PubSubClient.h \
+ lib/pubsubclient-2.3.bak/src/PubSubClient.h \
  lib/ArduinoJson/src/ArduinoJson.h lib/ArduinoJson/src/ArduinoJson.hpp \
  lib/ArduinoJson/src/ArduinoJson/Configuration.hpp \
  lib/myCust_lib/appManager.h lib/myCust_lib/connectionManager.h \
@@ -255,5 +255,5 @@
  C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/DNSServer/src/DNSServer.h \
  C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiUdp.h \
  lib/WiFiManager/strings_en.h lib/myCust_lib/app_config.h \
- lib/HX711/HX711.h lib/myCust_lib/receiverBoard.h \
+ lib/myCust_lib/receiverBoard.h \
  C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/esp32-camera/driver/include/sensor.h

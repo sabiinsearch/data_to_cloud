@@ -6,9 +6,7 @@
 #include "WiFi.h"
 
 // Others
-// #include <nvs.h>
-// #include <nvs_flash.h>
-
+//#include <TinyGPSPlus.h>
 
 // my libraries
 #include "appManager.h"
@@ -23,7 +21,6 @@ appManager managr;
 
 // WiFiClientSecure net = WiFiClientSecure();
 // PubSubClient client(net);
-
 
 
 void setup()
@@ -47,8 +44,6 @@ void loop()
 {
     
   getSensorData_print_update(&managr);
-  
-  checkButtonPressed(&managr);
   loop_mgr(&managr);
   delay(100);
 }

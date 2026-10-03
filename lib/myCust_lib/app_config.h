@@ -16,7 +16,7 @@
 
 /******************************* Do Not Edit / update these values      **************************************/
 //  Mqtt Configurations 
-    #define THINGNAME               "container_sensors"        // Change this
+    #define THINGNAME               "GPS_Device"        // Change this
     #define WIFI_SSID               "hukam"                    //change this
     #define WIFI_PASSWORD           "guest@13"                 //change this
     #define AWS_ENDPOINT            "a3txmb12xz0kci-ats.iot.ap-south-1.amazonaws.com"   // AWS MQTT Broker URL  

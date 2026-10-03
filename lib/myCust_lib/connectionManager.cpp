@@ -1,4 +1,5 @@
 #include <ArduinoJson.h>
+#include <time.h>
 #include "connectionManager.h"
 #include "Preferences.h"
 #include "appManager.h"
@@ -71,8 +72,15 @@ void publishOnMqtt(char* data, connectionManager* con) {
 }
 
 void connectAWS(connectionManager * con) {
+  // Certificate validity checks require the ESP32 clock to be synchronized.
+  time_t now = time(nullptr);
+  while (now < 1700000000) {
+    Serial.println("Waiting for NTP time before AWS TLS connection...");
+    delay(1000);
+    now = time(nullptr);
+  }
 
-  // Configure WiFiClientSecure to use the AWS IoT device credentials
+// Configure WiFiClientSecure to use the AWS IoT device credentials
   net.setCACert(AWS_CERT_CA);
   net.setCertificate(AWS_CERT_CRT);
   net.setPrivateKey(AWS_CERT_PRIVATE);
@@ -82,17 +90,25 @@ void connectAWS(connectionManager * con) {
   pub_sub_client.setServer(AWS_ENDPOINT, 8883);
 
   // Increase buffer size for larger payloads (JSON with time)
-  pub_sub_client.setBufferSize(512);
+ // pub_sub_client.setBufferSize(512);
 
   // Create a message handler
   pub_sub_client.setCallback(messageHandler);
 
   Serial.println("Connecting to AWS IOT");
 
+  unsigned long lastErrorLog = 0;
   while (!pub_sub_client.connect(THINGNAME))
   {
-    Serial.print(".");
-    delay(100);
+    if (millis() - lastErrorLog >= 5000) {
+      char tlsError[128] = {0};
+      int tlsErrorCode = net.lastError(tlsError, sizeof(tlsError));
+      Serial.printf("AWS connect failed: MQTT state=%d, TLS error=%d (%s)\n",
+                    pub_sub_client.state(), tlsErrorCode,
+                    tlsErrorCode ? tlsError : "none");
+      lastErrorLog = millis();
+    }
+    delay(1000);
   }
 
   if (!pub_sub_client.connected())
@@ -150,7 +166,7 @@ bool connectWiFi(connectionManager * con) {
   digitalWrite(HEARTBEAT_LED,LOW);  
   wm.setConfigPortalTimeout(TIMEOUT_INTERVAL); // If no access point name has been previously entered disable timeout
   // wm.setConnectTimeout(TIMEOUT_INTERVAL);
-  res = wm.autoConnect("myContainer"); // auto generated AP name from chipid
+  res = wm.autoConnect("GPS_Data"); // auto generated AP name from chipid
     while (WiFi.status() != WL_CONNECTED)
   {
     delay(500);
