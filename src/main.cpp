@@ -53,12 +53,12 @@ void loop()
       managr.publish_check = false;
    }
    publish_counter++;
-   
+
    getGPSdata(&managr);
    
   
   
   loop_mgr(&managr);
   Serial.println(F("==>> in loop() : main.cpp"));
-  delay(1000);
+  //delay(1000);
 }
