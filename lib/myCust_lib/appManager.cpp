@@ -43,7 +43,7 @@ void appManager_ctor(appManager * const me) {
 
       
     // Start I2C on custom pins (for ESP32)
-  Wire.begin(SDA, SCL);
+ // Wire.begin(SDA, SCL);
   neoserial.begin(9600, SERIAL_8N1, 16, 17); // Serial for GPS module on ESP32  
   Serial.println("NEO-6M GPS initialized. Waiting for satellite lock...");
 
@@ -179,8 +179,8 @@ void initRGB(){
          publishOnMqtt(jsonBuffer, appMgr->conManager);
 
         } 
-                 Serial.print("Published : ");
-         Serial.println(appMgr->publish_check);
+        //          Serial.print("Published : ");
+        //  Serial.println(appMgr->publish_check);
         
 }
 
@@ -188,10 +188,10 @@ void initRGB(){
 
  void getGPSdata(appManager* appMgr) {
   // Read incoming data from GPS module
-  while (neoserial.available() > 0) {
+//  while (neoserial.available() > 0) {
     if (gps.encode(neoserial.read())) {
       displayInfo(appMgr);
-    }
+//    }
   }
 
   // If 5 seconds pass with no data

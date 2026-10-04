@@ -48,8 +48,7 @@ void loop()
    if(publish_counter>PUBLILISH_INTERVAL) {      
       managr.publish_check = true;
       publish_counter = 0;
-   } else {
-      
+   } else {      
       managr.publish_check = false;
    }
    publish_counter++;
