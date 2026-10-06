@@ -13,6 +13,7 @@ typedef struct {
      connectionManager* conManager;     
      
         bool publish_check;
+        
      // float prev_temp;
      // float prev_load;
      // float load_threshold;

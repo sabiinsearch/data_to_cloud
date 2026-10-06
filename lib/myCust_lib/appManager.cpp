@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -27,7 +28,7 @@
 #include "soc/rtc.h"
 #include "esp32-hal-cpu.h"
 
-HardwareSerial gpsSerial(2);
+//HardwareSerial gpsSerial(2);
 
 connectionManager conManagerr;
 
@@ -44,7 +45,7 @@ void appManager_ctor(appManager * const me) {
       
     // Start I2C on custom pins (for ESP32)
  // Wire.begin(SDA, SCL);
-  gpsSerial.begin(9600, SERIAL_8N1, RX_GPS, TX_GPS); // Serial for GPS module on ESP32  
+  // Serial2.begin(9600, SERIAL_8N1, RX_GPS, TX_GPS); // Serial for GPS module on ESP32  
   Serial.println("NEO-6M GPS initialized. Waiting for satellite lock...");
 
    me->conManager = connectionManager_ctor(&conManagerr);
@@ -188,10 +189,10 @@ void initRGB(){
 
  void getGPSdata(appManager* appMgr) {
   // Read incoming data from GPS module
-  while(gpsSerial.available() > 0) {
-    //  char c = gpsSerial.read();
+  while(Serial2.available() > 0) {
+    //  char c = Serial2.read();
     //   Serial.write(c); // Uncomment this line to see raw GPS data in Serial Monitor
-      gps.encode(gpsSerial.read()); // Feed byte to the parser
+      gps.encode(Serial2.read()); // Feed byte to the parser
       displayInfo(appMgr);
     
   }
