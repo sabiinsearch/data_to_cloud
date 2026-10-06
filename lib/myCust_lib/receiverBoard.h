@@ -5,34 +5,15 @@
 
 // Sensors Config
 
-// Didplay
-#define ADD_OLED           0x3C
-#define SCREEN_WIDTH       128
-#define SCREEN_HEIGHT      64
-#define OLED_RESET         4
 
-// Temparatur & Humidity
-#define ADD_BME280         0x77
-
-
-#define SDA                21
-#define SCL                22
+#define RX_GPS                16
+#define TX_GPS                17
 
 // #define RGB LEDs
 #define HEARTBEAT_LED       27         // Red
 #define WIFI_LED            14         // Green
 #define MQTT_LED            26         // Blue
 
-// # define Level LEDs
-
-
-
-// DECLARE OTHER PARTS OF RECEIVER BOARD
-
-  #define LOAD_CELL_RESET_PIN         33    
-
-// #define reset_pin          22
-
-   unsigned long int getBoard_ID();
+unsigned long int getBoard_ID();
 
 #endif

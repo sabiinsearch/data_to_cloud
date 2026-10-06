@@ -27,7 +27,7 @@
 #include "soc/rtc.h"
 #include "esp32-hal-cpu.h"
 
-HardwareSerial neoserial(2);
+HardwareSerial gpsSerial(2);
 
 connectionManager conManagerr;
 
@@ -44,7 +44,7 @@ void appManager_ctor(appManager * const me) {
       
     // Start I2C on custom pins (for ESP32)
  // Wire.begin(SDA, SCL);
-  neoserial.begin(9600, SERIAL_8N1, 16, 17); // Serial for GPS module on ESP32  
+  gpsSerial.begin(9600, SERIAL_8N1, RX_GPS, TX_GPS); // Serial for GPS module on ESP32  
   Serial.println("NEO-6M GPS initialized. Waiting for satellite lock...");
 
    me->conManager = connectionManager_ctor(&conManagerr);
@@ -145,20 +145,13 @@ void initRGB(){
 
  void displayInfo(appManager* appMgr)
 { 
-   if (gps.location.isValid()) {
+  if (gps.location.isValid()) {
     Serial.print(F("Latitude: ")); 
     Serial.println(gps.location.lat(), 6);
     Serial.print(F("Longitude: ")); 
     Serial.println(gps.location.lng(), 6);
     Serial.print(F("Altitude: ")); 
     Serial.println(gps.altitude.meters());
-  } else {
-    Serial.print(F("Location: Not Available (Searching for satellites...)"));
-  }
-  Serial.println();
-  delay(1000);
-
-  
       // Increase size for time string
       StaticJsonDocument<512> doc;  
       
@@ -179,7 +172,14 @@ void initRGB(){
          publishOnMqtt(jsonBuffer, appMgr->conManager);
 
         } 
-        //          Serial.print("Published : ");
+
+  } else {
+    Serial.print(F("Location: Not Available (Searching for satellites...)"));
+  }
+  Serial.println();
+  delay(1000);
+
+          //          Serial.print("Published : ");
         //  Serial.println(appMgr->publish_check);
         
 }
@@ -188,16 +188,18 @@ void initRGB(){
 
  void getGPSdata(appManager* appMgr) {
   // Read incoming data from GPS module
-//  while (neoserial.available() > 0) {
-    if (gps.encode(neoserial.read())) {
+  while(gpsSerial.available() > 0) {
+    //  char c = gpsSerial.read();
+    //   Serial.write(c); // Uncomment this line to see raw GPS data in Serial Monitor
+      gps.encode(gpsSerial.read()); // Feed byte to the parser
       displayInfo(appMgr);
-//    }
+    
   }
 
   // If 5 seconds pass with no data
   if (millis() > 5000 && gps.charsProcessed() < 10) {
     Serial.println(F("No GPS data received: check wiring"));
-    delay(5000);
+    //delay(5000);
   }
  }
  
