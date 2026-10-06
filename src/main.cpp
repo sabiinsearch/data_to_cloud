@@ -56,18 +56,19 @@ void loop()
 {
     
  // getSensorData_print_update(&managr);
-  //  if(publish_counter>PUBLILISH_INTERVAL) {      
-  //     managr.publish_check = true;
-  //     publish_counter = 0;
-  //  } else {      
-  //     managr.publish_check = false;
-  //  }
-  //  publish_counter++;
-  //  Serial.print("Publish Counter : ");
-  //  Serial.println(publish_counter);
+   if(publish_counter>PUBLILISH_INTERVAL) {      
+      managr.publish_check = true;
+      publish_counter = 0;
+   } else {      
+      managr.publish_check = false;
+   }
+   publish_counter++;
+   Serial.print("Publish Counter : ");
+   Serial.println(publish_counter);
 
-   //getGPSdata(&managr);
+ getGPSdata(&managr);
 
+/*
  while (Serial2.available() > 0) {
     if (gps_.encode(Serial2.read())) {
       display_test();
@@ -78,7 +79,7 @@ void loop()
     Serial.println(F("No GPS detected: check wiring."));
     delay(5000);
   }
-   
+ */  
   loop_mgr(&managr);
   //Serial.println(F("==>> in loop() : main.cpp"));
   //delay(1000);

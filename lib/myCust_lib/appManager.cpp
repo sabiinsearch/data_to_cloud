@@ -47,7 +47,7 @@ void appManager_ctor(appManager * const me) {
  // Wire.begin(SDA, SCL);
   // Serial2.begin(9600, SERIAL_8N1, RX_GPS, TX_GPS); // Serial for GPS module on ESP32  
   Serial.println("NEO-6M GPS initialized. Waiting for satellite lock...");
-
+  me->publish_check = false;
    me->conManager = connectionManager_ctor(&conManagerr);
   Serial.println("Connection Manager set with App Manager");
 }
@@ -146,33 +146,15 @@ void initRGB(){
 
  void displayInfo(appManager* appMgr)
 { 
-  if (gps.location.isValid()) {
+  if (appMgr->mgr_gps.location.isUpdated()) {
     Serial.print(F("Latitude: ")); 
-    Serial.println(gps.location.lat(), 6);
+    Serial.println(appMgr->mgr_gps.location.lat(), 6);
     Serial.print(F("Longitude: ")); 
-    Serial.println(gps.location.lng(), 6);
-    Serial.print(F("Altitude: ")); 
-    Serial.println(gps.altitude.meters());
+    Serial.println(appMgr->mgr_gps.location.lng(), 6);
+    // Serial.print(F("Altitude: ")); 
+    // Serial.println(gps.altitude.meters());
       // Increase size for time string
-      StaticJsonDocument<512> doc;  
-      
-      doc["UID"] = UNIQUE_ID;
-      doc["Lat"] = gps.location.lat();
-      doc["Lng"] = gps.location.lng();
-      doc["Alt"] = gps.altitude.meters();
-    
-
-      char jsonBuffer[512]; // Increased buffer size
-      serializeJson(doc, jsonBuffer); // print to client
-      
-      if(!(appMgr->conManager->client.connected())) {
-
-           connectAWS(appMgr->conManager); 
-      }
-        if (appMgr->publish_check) {
-         publishOnMqtt(jsonBuffer, appMgr->conManager);
-
-        } 
+ 
 
   } else {
     Serial.print(F("Location: Not Available (Searching for satellites...)"));
@@ -185,22 +167,49 @@ void initRGB(){
         
 }
 
+void publishGPSdata(appManager* appMgr) {
 
+        StaticJsonDocument<512> doc;  
+      
+      doc["UID"] = UNIQUE_ID;
+      doc["Lat"] = gps.location.lat();
+      doc["Lng"] = gps.location.lng();
+      doc["time"] = gps.time.value();
+      // doc["Alt"] = gps.altitude.meters();
+    
+
+      char jsonBuffer[512]; // Increased buffer size
+      serializeJson(doc, jsonBuffer); // print to client
+      
+      if(!(appMgr->conManager->client.connected())) {
+
+           connectAWS(appMgr->conManager); 
+      }
+      
+      // Publish only if publish_check is true
+      if (appMgr->publish_check) {
+         publishOnMqtt(jsonBuffer, appMgr->conManager);
+         Serial.println("Published ");
+      }
+
+}
 
  void getGPSdata(appManager* appMgr) {
   // Read incoming data from GPS module
-  while(Serial2.available() > 0) {
-    //  char c = Serial2.read();
+  if(Serial2.available() > 0) {
+      char c = Serial2.read();
     //   Serial.write(c); // Uncomment this line to see raw GPS data in Serial Monitor
-      gps.encode(Serial2.read()); // Feed byte to the parser
-      displayInfo(appMgr);
+      if(appMgr->mgr_gps.encode(c)) {
+           displayInfo(appMgr);
+      } // Feed byte to the parser
+      
     
   }
 
   // If 5 seconds pass with no data
-  if (millis() > 5000 && gps.charsProcessed() < 10) {
+  if (millis() > 5000 && appMgr->mgr_gps.charsProcessed() < 10) {
     Serial.println(F("No GPS data received: check wiring"));
-    //delay(5000);
+    delay(5000);
   }
  }
  
