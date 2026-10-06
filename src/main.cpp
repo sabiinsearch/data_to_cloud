@@ -64,7 +64,9 @@ void loop()
    }
    publish_counter++;
    Serial.print("Publish Counter : ");
-   Serial.println(publish_counter);
+   Serial.print(publish_counter);
+   Serial.print(F("\t appMgr->publish_check : "));
+   Serial.println(managr.publish_check);
 
  getGPSdata(&managr);
 

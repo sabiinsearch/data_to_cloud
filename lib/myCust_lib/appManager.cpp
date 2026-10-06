@@ -151,6 +151,11 @@ void initRGB(){
     Serial.println(appMgr->mgr_gps.location.lat(), 6);
     Serial.print(F("Longitude: ")); 
     Serial.println(appMgr->mgr_gps.location.lng(), 6);
+
+    if(appMgr->publish_check) {
+        Serial.println(F("Publishing GPS data to AWS IoT..."));
+        publishGPSdata(appMgr);
+    }
     // Serial.print(F("Altitude: ")); 
     // Serial.println(gps.altitude.meters());
       // Increase size for time string
@@ -187,11 +192,8 @@ void publishGPSdata(appManager* appMgr) {
       }
       
       // Publish only if publish_check is true
-      if (appMgr->publish_check) {
-         publishOnMqtt(jsonBuffer, appMgr->conManager);
-         Serial.println("Published ");
-      }
 
+         publishOnMqtt(jsonBuffer, appMgr->conManager);
 }
 
  void getGPSdata(appManager* appMgr) {
@@ -203,7 +205,6 @@ void publishGPSdata(appManager* appMgr) {
            displayInfo(appMgr);
       } // Feed byte to the parser
       
-    
   }
 
   // If 5 seconds pass with no data
