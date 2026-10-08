@@ -10,8 +10,8 @@
             "includePath": [
                 "c:/myData/software_projects/RAD/GPS_Volt_data_to_cloud/src",
                 "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
-                "c:/myData/software_projects/RAD/GPS_Volt_data_to_cloud/lib/TinyGPSPlus/src",
                 "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/EEPROM/src",
+                "c:/myData/software_projects/RAD/GPS_Volt_data_to_cloud/lib/TinyGPSPlus/src",
                 "c:/myData/software_projects/RAD/GPS_Volt_data_to_cloud/lib/WiFiManager",
                 "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/WebServer/src",
                 "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/FS/src",
@@ -251,8 +251,8 @@
                 "path": [
                     "c:/myData/software_projects/RAD/GPS_Volt_data_to_cloud/src",
                     "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
-                    "c:/myData/software_projects/RAD/GPS_Volt_data_to_cloud/lib/TinyGPSPlus/src",
                     "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/EEPROM/src",
+                    "c:/myData/software_projects/RAD/GPS_Volt_data_to_cloud/lib/TinyGPSPlus/src",
                     "c:/myData/software_projects/RAD/GPS_Volt_data_to_cloud/lib/WiFiManager",
                     "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/WebServer/src",
                     "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/FS/src",

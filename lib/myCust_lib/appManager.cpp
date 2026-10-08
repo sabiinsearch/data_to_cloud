@@ -151,18 +151,18 @@ void initRGB(){
     Serial.println(appMgr->mgr_gps.location.lat(), 6);
     Serial.print(F("Longitude: ")); 
     Serial.println(appMgr->mgr_gps.location.lng(), 6);
-
-    if(appMgr->publish_check) {
-        Serial.println(F("Publishing GPS data to AWS IoT..."));
-        publishGPSdata(appMgr);
-    }
+    updateGPSdata(appMgr); // Update GPS data in appManager
     // Serial.print(F("Altitude: ")); 
     // Serial.println(gps.altitude.meters());
       // Increase size for time string
- 
 
   } else {
     Serial.print(F("Location: Not Available (Searching for satellites...)"));
+  }
+
+  if(appMgr->publish_check) {
+        Serial.println(F("Publishing GPS data to AWS IoT..."));
+        publishGPSdata(appMgr);
   }
   Serial.println();
   delay(1000);
@@ -172,13 +172,19 @@ void initRGB(){
         
 }
 
+void updateGPSdata(appManager* appMgr) {          
+  
+      appMgr->location = gps.location.lat();
+      appMgr->longitude = gps.location.lng();      
+}
+
 void publishGPSdata(appManager* appMgr) {
 
-        StaticJsonDocument<512> doc;  
+      StaticJsonDocument<512> doc;  
       
       doc["UID"] = UNIQUE_ID;
-      doc["Lat"] = gps.location.lat();
-      doc["Lng"] = gps.location.lng();
+      doc["Lat"] = appMgr->location;
+      doc["Lng"] = appMgr->longitude;
       doc["time"] = gps.time.value();
       // doc["Alt"] = gps.altitude.meters();
     
@@ -194,6 +200,7 @@ void publishGPSdata(appManager* appMgr) {
       // Publish only if publish_check is true
 
          publishOnMqtt(jsonBuffer, appMgr->conManager);
+         Serial.println(F("Published GPS data to AWS IoT "));
 }
 
  void getGPSdata(appManager* appMgr) {
