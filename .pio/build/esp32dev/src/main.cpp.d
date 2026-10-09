@@ -236,6 +236,11 @@
  lib/pubsubclient-2.3.bak/src/PubSubClient.h \
  lib/ArduinoJson/src/ArduinoJson.h lib/ArduinoJson/src/ArduinoJson.hpp \
  lib/ArduinoJson/src/ArduinoJson/Configuration.hpp \
+ C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/nvs_flash/include/nvs.h \
+ C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/nvs_flash/include/nvs_flash.h \
+ C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/nvs_flash/include/nvs.h \
+ C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src/SPI.h \
+ C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/cores/esp32/esp32-hal-spi.h \
  lib/TinyGPSPlus/src/TinyGPSPlus.h lib/TinyGPSPlus/src/TinyGPS++.h \
  lib/myCust_lib/appManager.h lib/myCust_lib/connectionManager.h \
  lib/WiFiManager/WiFiManager.h \

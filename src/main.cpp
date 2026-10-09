@@ -6,6 +6,11 @@
 #include "WiFi.h"
 #include "app_config.h"     // for Custom Configration
 
+#include <nvs.h>
+#include <nvs_flash.h>
+#include <stdlib.h>
+#include <SPI.h>
+
 // Others
 #include <TinyGPSPlus.h>
 
@@ -44,8 +49,13 @@ void setup()
 
   Serial.begin(115200);
   Serial2.begin(9600, SERIAL_8N1, RX_GPS, TX_GPS); // Serial for GPS module on ESP32  
+
+  // assinig the GPS task in second core of ESP32
+  xTaskCreatePinnedToCore( get_setGPSdata, "GPS_Task", 4096, &managr, 1, NULL, 1);
+
+     
+//    Serial.println("first task created ");
     // Initiating Manager
-  //Serial.println("Initializing App Manager..");
   appManager_ctor(&managr);
   
   Serial.println("All Systems Initialized..");
@@ -68,7 +78,7 @@ void loop()
    Serial.print(F("\t appMgr->publish_check : "));
    Serial.println(managr.publish_check);
 
- getGPSdata(&managr);
+   publishData(&managr);
 
 /*
  while (Serial2.available() > 0) {

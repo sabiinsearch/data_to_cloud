@@ -35,8 +35,9 @@ void getSensorData_print_update(appManager*);
 void loop_mgr(appManager*);
 void getGPSdata(appManager* appMgr);
 void displayInfo(appManager* appMgr);
-void publishGPSdata(appManager* appMgr);
+void publishData(appManager* appMgr);
 void updateGPSdata(appManager* appMgr);
+void get_setGPSdata(void * pvParameters);
 
 
 // functions to set LEDs as per status

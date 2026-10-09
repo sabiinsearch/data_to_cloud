@@ -157,10 +157,6 @@ void initRGB(){
     Serial.print(F("Location: Not Available (Searching for satellites...)"));
   }
 
-  if(appMgr->publish_check) {
-        Serial.println(F("Publishing GPS data to AWS IoT..."));
-        publishGPSdata(appMgr);
-  }
   Serial.println();
   delay(1000);
 
@@ -175,7 +171,15 @@ void updateGPSdata(appManager* appMgr) {
       appMgr->longitude = gps.location.lng();      
 }
 
-void publishGPSdata(appManager* appMgr) {
+void get_setGPSdata(void * pvParameters) {
+  
+  appManager* appMgr = (appManager*) pvParameters;
+  getGPSdata(appMgr);
+  vTaskDelay(100 / portTICK_PERIOD_MS); // Delay for a short period to yield to other tasks
+
+}
+
+void publishData(appManager* appMgr) {
 
       StaticJsonDocument<512> doc;  
       
