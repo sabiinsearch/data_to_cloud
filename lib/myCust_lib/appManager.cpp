@@ -152,9 +152,6 @@ void initRGB(){
     Serial.print(F("Longitude: ")); 
     Serial.println(appMgr->mgr_gps.location.lng(), 6);
     updateGPSdata(appMgr); // Update GPS data in appManager
-    // Serial.print(F("Altitude: ")); 
-    // Serial.println(gps.altitude.meters());
-      // Increase size for time string
 
   } else {
     Serial.print(F("Location: Not Available (Searching for satellites...)"));
