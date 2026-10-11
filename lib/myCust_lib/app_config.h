@@ -7,7 +7,7 @@
 
 #define UNIQUE_ID "device_001"  // change this for each device
 
-#define BAT_MIN_THRESHOLD       5  // Voltage threshold for high battery
+#define BAT_MIN_THRESHOLD       7  // Voltage threshold for high battery
 #define BAT_MAX_THRESHOLD       15  // Voltage threshold for low battery
 
 /******************************* Do Not Edit / update these values      **************************************/
