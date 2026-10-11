@@ -4,15 +4,11 @@
 
 #include "Arduino.h"
 
-//  Dummy Sensor Data 
-#define TEMP_Demo      27.0
-#define HUMIDITY_Demo  105.0
-#define LOAD_Demo      100
 
-//
 #define UNIQUE_ID "device_001"  // change this for each device
-// For Load Cell
-#define CALIBRATION_FACTOR_LOADCELL 2230 // this calibration factor is adjusted according to my load cell
+
+#define BAT_MIN_THRESHOLD       5  // Voltage threshold for high battery
+#define BAT_MAX_THRESHOLD       15  // Voltage threshold for low battery
 
 /******************************* Do Not Edit / update these values      **************************************/
 //  Mqtt Configurations 

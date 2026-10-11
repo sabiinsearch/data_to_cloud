@@ -65,7 +65,9 @@ void setup()
 void loop()
 {
     
- // getSensorData_print_update(&managr);
+  checkBatteryStatus(&managr);
+
+  // getSensorData_print_update(&managr);
    if(publish_counter>PUBLILISH_INTERVAL) {      
       managr.publish_check = true;
       publish_counter = 0;

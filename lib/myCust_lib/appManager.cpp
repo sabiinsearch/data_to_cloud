@@ -42,7 +42,8 @@ TinyGPSPlus gps;
 
 void appManager_ctor(appManager * const me) {
 
-      
+  // init board    
+  initBoard();
     // Start I2C on custom pins (for ESP32)
  // Wire.begin(SDA, SCL);
   // Serial2.begin(9600, SERIAL_8N1, RX_GPS, TX_GPS); // Serial for GPS module on ESP32  
@@ -129,17 +130,30 @@ void getSensorData_print_update(appManager* appMgr) {
 */ 
 }
 
-void initRGB(){
-  pinMode(HEARTBEAT_LED, OUTPUT);
-  pinMode(WIFI_LED, OUTPUT);
-  pinMode(MQTT_LED, OUTPUT);
-  
-  digitalWrite(HEARTBEAT_LED,HIGH);
-  digitalWrite(WIFI_LED,HIGH);
-  digitalWrite(MQTT_LED,HIGH);
 
-  //Serial.println("InitRGB : appManager.cpp");
+ void checkBatteryStatus(appManager* appMgr) {
   
+  int b_Level = analogRead(BAT_PIN);
+
+  appMgr->batteryLevel = b_Level * (3.3 / 4095.0) * 2; // Convert ADC reading to voltage (assuming a voltage divider) 
+  Serial.print("Battery Level: ");
+  Serial.println(b_Level);
+
+   // Map the raw value to a 0 - 100% range
+  int batteryPercentage = map(appMgr->batteryLevel, BAT_MIN_THRESHOLD, BAT_MAX_THRESHOLD, 0, 100);
+
+  if (b_Level > BAT_MIN_THRESHOLD) {
+    digitalWrite(BAT_HIGH_PIN, HIGH);
+    digitalWrite(BAT_LOW_PIN, LOW);
+    Serial.println("Battery Status: High");
+
+  } else if (b_Level < BAT_MIN_THRESHOLD) {
+    digitalWrite(BAT_HIGH_PIN, LOW);
+    digitalWrite(BAT_LOW_PIN, HIGH);
+    Serial.println("Battery Status: Low");
+  
+  }
+
  }
 
  // Function to display GPS info
@@ -150,8 +164,7 @@ void initRGB(){
     Serial.print(F("Latitude: ")); 
     Serial.println(appMgr->mgr_gps.location.lat(), 6);
     Serial.print(F("Longitude: ")); 
-    Serial.println(appMgr->mgr_gps.location.lng(), 6);
-    updateGPSdata(appMgr); // Update GPS data in appManager
+    Serial.println(appMgr->mgr_gps.location.lng(), 6); 
 
   } else {
     Serial.print(F("Location: Not Available (Searching for satellites...)"));
@@ -165,11 +178,6 @@ void initRGB(){
         
 }
 
-void updateGPSdata(appManager* appMgr) {          
-  
-      appMgr->location = gps.location.lat();
-      appMgr->longitude = gps.location.lng();      
-}
 
 void get_setGPSdata(void * pvParameters) {
   
@@ -177,6 +185,12 @@ void get_setGPSdata(void * pvParameters) {
   getGPSdata(appMgr);
   vTaskDelay(100 / portTICK_PERIOD_MS); // Delay for a short period to yield to other tasks
 
+  // set GPS data in appManager
+//  appMgr->location = appMgr->mgr_gps.location.lat();
+//  appMgr->longitude = appMgr->mgr_gps.location.lng(); 
+
+  Serial.print("GPS Data Updated in appManager: ");
+  vTaskDelete(NULL); // Delete the task when done
 }
 
 void publishData(appManager* appMgr) {
@@ -184,10 +198,10 @@ void publishData(appManager* appMgr) {
       StaticJsonDocument<512> doc;  
       
       doc["UID"] = UNIQUE_ID;
-      doc["Lat"] = appMgr->location;
-      doc["Lng"] = appMgr->longitude;
-      doc["time"] = gps.time.value();
-      // doc["Alt"] = gps.altitude.meters();
+      doc["Lat"] = appMgr->mgr_gps.location.lat();
+      doc["Lng"] = appMgr->mgr_gps.location.lng();
+      doc["Battery"] = appMgr->batteryLevel;
+      // doc["Alt"] = appMgr->mgr_gps.altitude.meters();
     
 
       char jsonBuffer[512]; // Increased buffer size
@@ -225,8 +239,16 @@ void publishData(appManager* appMgr) {
  void initBoard() {  
   // Configuring Board pins
 
+  pinMode(BAT_PIN, INPUT);
+
+  pinMode(BAT_HIGH_PIN, OUTPUT);
+
+  pinMode(BAT_LOW_PIN, OUTPUT);
+
+  pinMode(BAT_SW_PIN, OUTPUT);
+
   Serial.println();
-  Serial.println(F("Done."));
+  Serial.println(F("Board Initialized."));
 
  }
  

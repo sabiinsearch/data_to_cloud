@@ -9,6 +9,7 @@
             "name": "PlatformIO",
             "includePath": [
                 "c:/myData/software_projects/RAD/GPS_Volt_data_to_cloud/src",
+                "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src",
                 "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
                 "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/EEPROM/src",
                 "c:/myData/software_projects/RAD/GPS_Volt_data_to_cloud/lib/TinyGPSPlus/src",
@@ -238,7 +239,6 @@
                 "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/RainMaker/src",
                 "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/SD/src",
                 "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/SD_MMC/src",
-                "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src",
                 "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/SPIFFS/src",
                 "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/SimpleBLE/src",
                 "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/Ticker/src",
@@ -250,6 +250,7 @@
                 "limitSymbolsToIncludedHeaders": true,
                 "path": [
                     "c:/myData/software_projects/RAD/GPS_Volt_data_to_cloud/src",
+                    "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src",
                     "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
                     "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/EEPROM/src",
                     "c:/myData/software_projects/RAD/GPS_Volt_data_to_cloud/lib/TinyGPSPlus/src",
@@ -479,7 +480,6 @@
                     "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/RainMaker/src",
                     "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/SD/src",
                     "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/SD_MMC/src",
-                    "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src",
                     "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/SPIFFS/src",
                     "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/SimpleBLE/src",
                     "C:/Users/Hp/.platformio/packages/framework-arduinoespressif32/libraries/Ticker/src",

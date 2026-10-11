@@ -17,6 +17,8 @@ typedef struct {
         TinyGPSPlus mgr_gps;
         float location;
         float longitude;
+        float batteryLevel;
+        
      // float prev_temp;
      // float prev_load;
      // float load_threshold;
@@ -38,6 +40,7 @@ void displayInfo(appManager* appMgr);
 void publishData(appManager* appMgr);
 void updateGPSdata(appManager* appMgr);
 void get_setGPSdata(void * pvParameters);
+void checkBatteryStatus(appManager* appMgr);
 
 
 // functions to set LEDs as per status
