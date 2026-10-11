@@ -142,12 +142,12 @@ void getSensorData_print_update(appManager* appMgr) {
    // Map the raw value to a 0 - 100% range
   int batteryPercentage = map(appMgr->batteryLevel, BAT_MIN_THRESHOLD, BAT_MAX_THRESHOLD, 0, 100);
 
-  if (b_Level > BAT_MIN_THRESHOLD) {
+  if (appMgr->batteryLevel > BAT_MIN_THRESHOLD) {
     digitalWrite(BAT_HIGH_PIN, HIGH);
     digitalWrite(BAT_LOW_PIN, LOW);
     Serial.println("Battery Status: High");
 
-  } else if (b_Level < BAT_MIN_THRESHOLD) {
+  } else if (appMgr->batteryLevel < BAT_MIN_THRESHOLD) {
     digitalWrite(BAT_HIGH_PIN, LOW);
     digitalWrite(BAT_LOW_PIN, HIGH);
     Serial.println("Battery Status: Low");
