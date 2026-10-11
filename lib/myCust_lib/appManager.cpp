@@ -137,11 +137,13 @@ void getSensorData_print_update(appManager* appMgr) {
 
   appMgr->batteryLevel = b_Level * (3.3 / 4095.0) * 2; // Convert ADC reading to voltage (assuming a voltage divider) 
   Serial.print("Battery Level: ");
-  Serial.println(b_Level);
+
 
    // Map the raw value to a 0 - 100% range
   int batteryPercentage = map(appMgr->batteryLevel, BAT_MIN_THRESHOLD, BAT_MAX_THRESHOLD, 0, 100);
+  Serial.println(appMgr->batteryLevel);
 
+  // Check battery status and control LEDs
   if (appMgr->batteryLevel > BAT_MIN_THRESHOLD) {
     digitalWrite(BAT_HIGH_PIN, HIGH);
     digitalWrite(BAT_LOW_PIN, LOW);
@@ -160,7 +162,7 @@ void getSensorData_print_update(appManager* appMgr) {
 
  void displayInfo(appManager* appMgr)
 { 
-  if (appMgr->mgr_gps.location.isUpdated()) {
+  if (appMgr->mgr_gps.location.isValid()) {
     Serial.print(F("Latitude: ")); 
     Serial.println(appMgr->mgr_gps.location.lat(), 6);
     Serial.print(F("Longitude: ")); 
@@ -220,10 +222,9 @@ void publishData(appManager* appMgr) {
 
  void getGPSdata(appManager* appMgr) {
   // Read incoming data from GPS module
-  if(Serial2.available() > 0) {
-      char c = Serial2.read();
+  while(Serial2.available() > 0) {     
     //   Serial.write(c); // Uncomment this line to see raw GPS data in Serial Monitor
-      if(appMgr->mgr_gps.encode(c)) {
+      if(appMgr->mgr_gps.encode(Serial2.read())) {
            displayInfo(appMgr);
       } // Feed byte to the parser
       

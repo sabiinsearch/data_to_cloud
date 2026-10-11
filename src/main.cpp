@@ -48,15 +48,17 @@ void setup()
 //xTaskCreate(TaskFunction, "ScaleTask", 4096, NULL, 1, NULL);
 
   Serial.begin(115200);
+  
   Serial2.begin(9600, SERIAL_8N1, RX_GPS, TX_GPS); // Serial for GPS module on ESP32  
-
+  
+  appManager_ctor(&managr);
   // assinig the GPS task in second core of ESP32
   xTaskCreatePinnedToCore( get_setGPSdata, "GPS_Task", 4096, &managr, 1, NULL, 1);
 
      
 //    Serial.println("first task created ");
     // Initiating Manager
-  appManager_ctor(&managr);
+  
   
   Serial.println("All Systems Initialized..");
  
