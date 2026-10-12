@@ -77,10 +77,10 @@ void loop()
       managr.publish_check = false;
    }
    publish_counter++;
-   Serial.print("Publish Counter : ");
-   Serial.print(publish_counter);
-   Serial.print(F("\t appMgr->publish_check : "));
-   Serial.println(managr.publish_check);
+  //  Serial.print("Publish Counter : ");
+  //  Serial.print(publish_counter);
+  //  Serial.print(F("\t appMgr->publish_check : "));
+  //  Serial.println(managr.publish_check);
 
    publishData(&managr);
 

@@ -133,17 +133,27 @@ void getSensorData_print_update(appManager* appMgr) {
 
  void checkBatteryStatus(appManager* appMgr) {
   
-  int b_Level = analogRead(BAT_PIN);
-
-  appMgr->batteryLevel = (b_Level / 4095.0) * 3.3; // Convert ADC reading to voltage (assuming a voltage divider) 
-  Serial.print("Battery Level: ");
+  int rawValue = analogRead(BAT_PIN); // Read the raw ADC value from the battery pin
+  Serial.print(F("Raw_Value: "));
+  Serial.println(rawValue);
+  // 1. Convert raw ADC reading to pin voltage
+  float pinVoltage = (rawValue / adcResolution) * referenceVoltage;
+  Serial.print(F("pin_Volt: "));
+  Serial.println(pinVoltage);
+  // 2. Reconstruct actual battery voltage using the resistor divider ratio
+  float batteryVoltage = pinVoltage * voltageDividerRatio;
+  Serial.print(F("Bat_Volt: "));
+  Serial.println(batteryVoltage);
+  appMgr->batteryLevel = batteryVoltage; // Store the battery voltage in appManager
+ 
+ // batteryPercent = constrain(batteryPercent, 0.0, 100.0);
 
 
    // Map the raw value to a 0 - 100% range
-  int batteryPercentage = map(appMgr->batteryLevel, BAT_MIN_THRESHOLD, BAT_MAX_THRESHOLD, 0, 100);
-  Serial.print(b_Level);
-  Serial.print("\t ");
-  Serial.println(appMgr->batteryLevel);
+  float batteryPercent = ((appMgr->batteryLevel - BAT_MIN_THRESHOLD) / (BAT_MAX_THRESHOLD - BAT_MIN_THRESHOLD)) * 100.0; 
+ // float batteryPercentage = map(appMgr->batteryLevel, BAT_MIN_THRESHOLD, BAT_MAX_THRESHOLD, 0, 100);
+  Serial.print("Bat_perc: ");
+  Serial.println(batteryPercent);
 
   // Check battery status and control LEDs
   if (appMgr->batteryLevel > BAT_MIN_THRESHOLD) {
