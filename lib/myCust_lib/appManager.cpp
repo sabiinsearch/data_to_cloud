@@ -135,12 +135,14 @@ void getSensorData_print_update(appManager* appMgr) {
   
   int b_Level = analogRead(BAT_PIN);
 
-  appMgr->batteryLevel = b_Level * (3.3 / 4095.0) * 2; // Convert ADC reading to voltage (assuming a voltage divider) 
+  appMgr->batteryLevel = (b_Level / 4095.0) * 3.3; // Convert ADC reading to voltage (assuming a voltage divider) 
   Serial.print("Battery Level: ");
 
 
    // Map the raw value to a 0 - 100% range
   int batteryPercentage = map(appMgr->batteryLevel, BAT_MIN_THRESHOLD, BAT_MAX_THRESHOLD, 0, 100);
+  Serial.print(b_Level);
+  Serial.print("\t ");
   Serial.println(appMgr->batteryLevel);
 
   // Check battery status and control LEDs
