@@ -205,12 +205,22 @@ void publishData(appManager* appMgr) {
       
       snprintf(lat_Buff, sizeof(lat_Buff), "%.1f", appMgr->mgr_gps.location.lat());
       snprintf(lng_Buff, sizeof(lng_Buff), "%.1f", appMgr->mgr_gps.location.lng());
-      snprintf(batt_Buff, sizeof(batt_Buff), "%.1f", appMgr->batteryLevel);
+      snprintf(batt_Buff, sizeof(batt_Buff), "%.1f", appMgr->batteryLevel);      
 
       doc["UID"] = UNIQUE_ID;
       doc["Lat"] = lat_Buff;
       doc["Lng"] = lng_Buff;
       doc["Battery"] = batt_Buff;
+
+      // Get current time
+      struct tm timeinfo;
+      if(getLocalTime(&timeinfo)){
+        char timeStringBuff[50];
+        strftime(timeStringBuff, sizeof(timeStringBuff), "%Y-%m-%d %H:%M:%S", &timeinfo);
+        doc["time"] = timeStringBuff;
+      } else {
+        doc["time"] = "NTP_SYNC_FAILED";
+      }      
       // doc["Alt"] = appMgr->mgr_gps.altitude.meters();
     
 
