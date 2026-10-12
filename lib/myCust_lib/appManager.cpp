@@ -197,12 +197,20 @@ void get_setGPSdata(void * pvParameters) {
 
 void publishData(appManager* appMgr) {
 
-      StaticJsonDocument<512> doc;  
+      StaticJsonDocument<512> doc;  // JSON document for publishing data, increased size for time string
       
+      char lat_Buff[20];
+      char lng_Buff[20];
+      char batt_Buff[20];
+      
+      snprintf(lat_Buff, sizeof(lat_Buff), "%.1f", appMgr->mgr_gps.location.lat());
+      snprintf(lng_Buff, sizeof(lng_Buff), "%.1f", appMgr->mgr_gps.location.lng());
+      snprintf(batt_Buff, sizeof(batt_Buff), "%.1f", appMgr->batteryLevel);
+
       doc["UID"] = UNIQUE_ID;
-      doc["Lat"] = appMgr->mgr_gps.location.lat();
-      doc["Lng"] = appMgr->mgr_gps.location.lng();
-      doc["Battery"] = appMgr->batteryLevel;
+      doc["Lat"] = lat_Buff;
+      doc["Lng"] = lng_Buff;
+      doc["Battery"] = batt_Buff;
       // doc["Alt"] = appMgr->mgr_gps.altitude.meters();
     
 
