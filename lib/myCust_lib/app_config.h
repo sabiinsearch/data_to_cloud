@@ -13,6 +13,7 @@
 #define voltageDividerRatio     0.0909  // Adjust this based on your voltage divider circuit
 #define referenceVoltage        3.6  // Reference voltage for ADC (ESP32 typically uses 3.3V)
 #define adcResolution           4095 // 12-bit ADC resolution for ESP32
+#define calibrationFactor       0.9563   // Adjust this based on your calibration
 
 /******************************* Do Not Edit / update these values      **************************************/
 //  Mqtt Configurations 

@@ -153,7 +153,7 @@ void getSensorData_print_update(appManager* appMgr) {
   // 6. Manual Calibration Factor
   // Measure your real battery using a voltmeter. If the serial output reads 4.0V 
   // but your multimeter says 4.15V, adjust this factor (e.g., 4.15 / 4.0 = 1.0375)
-  float calibrationFactor = 1.00; 
+  
   batteryVoltage *= calibrationFactor;
 
   appMgr->batteryLevel = batteryVoltage; // Store the battery voltage in appManager
