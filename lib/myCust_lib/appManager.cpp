@@ -132,18 +132,33 @@ void getSensorData_print_update(appManager* appMgr) {
 
 
  void checkBatteryStatus(appManager* appMgr) {
+
+  digitalWrite(BAT_SW_PIN, HIGH); // Turn on the battery voltage divider
+  delay(50); // Wait for the voltage to stabilize
   
-  int rawValue = analogRead(BAT_PIN); // Read the raw ADC value from the battery pin
-  Serial.print(F("Raw_Value: "));
-  Serial.println(rawValue);
-  // 1. Convert raw ADC reading to pin voltage
-  float pinVoltage = (rawValue / adcResolution) * referenceVoltage;
-  Serial.print(F("pin_Volt: "));
-  Serial.println(pinVoltage);
-  // 2. Reconstruct actual battery voltage using the resistor divider ratio
-  float batteryVoltage = pinVoltage * voltageDividerRatio;
-  Serial.print(F("Bat_Volt: "));
-  Serial.println(batteryVoltage);
+    // 3. Multisample to eradicate ADC noise spikes
+  uint32_t rawSum = 0;
+  const int samples = 64;
+  
+  for (int i = 0; i < samples; i++) {
+    rawSum += analogRead(BAT_PIN);
+    delay(1);
+  }
+  float rawAverage = (float)rawSum / samples;
+
+  // 4. Calculate voltage at the Pin 
+  // (Using 3.6V max scale ceiling for 11dB attenuation mapping)
+  float pinVoltage = (rawAverage * 3.6) / 4095.0; 
+
+  // 5. Calculate final battery voltage using your divider math
+  float batteryVoltage = pinVoltage / voltageDividerRatio;
+
+  // 6. Manual Calibration Factor
+  // Measure your real battery using a voltmeter. If the serial output reads 4.0V 
+  // but your multimeter says 4.15V, adjust this factor (e.g., 4.15 / 4.0 = 1.0375)
+  float calibrationFactor = 1.00; 
+  batteryVoltage *= calibrationFactor;
+
   appMgr->batteryLevel = batteryVoltage; // Store the battery voltage in appManager
  
  // batteryPercent = constrain(batteryPercent, 0.0, 100.0);
@@ -152,19 +167,19 @@ void getSensorData_print_update(appManager* appMgr) {
    // Map the raw value to a 0 - 100% range
   float batteryPercent = ((appMgr->batteryLevel - BAT_MIN_THRESHOLD) / (BAT_MAX_THRESHOLD - BAT_MIN_THRESHOLD)) * 100.0; 
  // float batteryPercentage = map(appMgr->batteryLevel, BAT_MIN_THRESHOLD, BAT_MAX_THRESHOLD, 0, 100);
-  Serial.print("Bat_perc: ");
-  Serial.println(batteryPercent);
+  // Serial.print("Bat_perc: ");
+  // Serial.println(batteryPercent);
 
   // Check battery status and control LEDs
   if (appMgr->batteryLevel > BAT_MIN_THRESHOLD) {
     digitalWrite(BAT_HIGH_PIN, HIGH);
     digitalWrite(BAT_LOW_PIN, LOW);
-    Serial.println("Battery Status: High");
+   // Serial.println("Battery Status: High");
 
   } else if (appMgr->batteryLevel < BAT_MIN_THRESHOLD) {
     digitalWrite(BAT_HIGH_PIN, LOW);
     digitalWrite(BAT_LOW_PIN, HIGH);
-    Serial.println("Battery Status: Low");
+   // Serial.println("Battery Status: Low");
   
   }
 
@@ -180,6 +195,7 @@ void getSensorData_print_update(appManager* appMgr) {
     Serial.print(F("Longitude: ")); 
     Serial.println(appMgr->mgr_gps.location.lng(), 6); 
 
+    Serial.println("GPS Data Updated in appManager: ");
   } else {
     Serial.print(F("Location: Not Available (Searching for satellites...)"));
   }
@@ -203,8 +219,20 @@ void get_setGPSdata(void * pvParameters) {
 //  appMgr->location = appMgr->mgr_gps.location.lat();
 //  appMgr->longitude = appMgr->mgr_gps.location.lng(); 
 
-  Serial.print("GPS Data Updated in appManager: ");
   vTaskDelete(NULL); // Delete the task when done
+}
+
+void get_temp_data(appManager* appMgr) {
+
+float voltage = analogReadMilliVolts(TEMP_PIN); // Read the voltage in millivolts directly
+
+// 2. Keep your original LM35 scale step (10mV per degree)
+float tempC = voltage / 10.0; 
+  Serial.print(F("Temp_v & Temp_C: "));
+  Serial.print(voltage);
+  Serial.print(F(" : "));
+  Serial.println(tempC);
+  appMgr->temperature = tempC; // Store the temperature in appManager
 }
 
 void publishData(appManager* appMgr) {
@@ -214,15 +242,17 @@ void publishData(appManager* appMgr) {
       char lat_Buff[20];
       char lng_Buff[20];
       char batt_Buff[20];
-      
+      char temp_Buff[20];
       snprintf(lat_Buff, sizeof(lat_Buff), "%.1f", appMgr->mgr_gps.location.lat());
       snprintf(lng_Buff, sizeof(lng_Buff), "%.1f", appMgr->mgr_gps.location.lng());
-      snprintf(batt_Buff, sizeof(batt_Buff), "%.1f", appMgr->batteryLevel);      
+      snprintf(batt_Buff, sizeof(batt_Buff), "%.1f", appMgr->batteryLevel);
+      snprintf(temp_Buff, sizeof(temp_Buff), "%.1f", appMgr->temperature);
 
       doc["UID"] = UNIQUE_ID;
       doc["Lat"] = lat_Buff;
       doc["Lng"] = lng_Buff;
       doc["Battery"] = batt_Buff;
+      doc["Temp"] = temp_Buff;
 
       // Get current time
       struct tm timeinfo;
@@ -247,7 +277,8 @@ void publishData(appManager* appMgr) {
       // Publish only if publish_check is true
          if(appMgr->publish_check) {
          publishOnMqtt(jsonBuffer, appMgr->conManager);
-         Serial.println(F("Published GPS data to AWS IoT "));
+         Serial.print(F("Published GPS data to AWS IoT "));
+         Serial.println(jsonBuffer);
          }
 }
 
@@ -279,7 +310,10 @@ void publishData(appManager* appMgr) {
 
   pinMode(BAT_SW_PIN, OUTPUT);
 
+  pinMode(TEMP_PIN, INPUT);
+
   Serial.println();
+  
   Serial.println(F("Board Initialized."));
 
  }

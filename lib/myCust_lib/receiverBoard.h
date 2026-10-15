@@ -20,6 +20,7 @@
 #define BAT_HIGH_PIN       18
 #define BAT_LOW_PIN        19
 #define BAT_SW_PIN         5
+#define TEMP_PIN           35
 
 unsigned long int getBoard_ID();
 

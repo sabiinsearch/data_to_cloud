@@ -10,8 +10,8 @@
 #define BAT_MIN_THRESHOLD       7  // Voltage threshold for high battery
 #define BAT_MAX_THRESHOLD       15  // Voltage threshold for low battery
 
-#define voltageDividerRatio     2.0  // Adjust this based on your voltage divider circuit
-#define referenceVoltage        3.3  // Reference voltage for ADC (ESP32 typically uses 3.3V)
+#define voltageDividerRatio     0.248  // Adjust this based on your voltage divider circuit
+#define referenceVoltage        3.6  // Reference voltage for ADC (ESP32 typically uses 3.3V)
 #define adcResolution           4095 // 12-bit ADC resolution for ESP32
 
 /******************************* Do Not Edit / update these values      **************************************/
@@ -23,7 +23,7 @@
     #define AWS_IOT_PUBLISH_TOPIC   "Device/GPS_data_frm"           //change this
     #define AWS_IOT_SUBSCRIBE_TOPIC "Device/GPS_data_to"           //change this
 
-    #define PUBLILISH_INTERVAL  2000       // seconds  // actually 16 seconds 
+    #define PUBLILISH_INTERVAL  200       // seconds  // actually 16 seconds 
     #define TIMEOUT_INTERVAL    120       // seconds
     #define DISPLAY_TIME        10000      // milliseconds  
 #endif

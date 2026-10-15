@@ -18,6 +18,7 @@ typedef struct {
         float location;
         float longitude;
         float batteryLevel;
+        float temperature;
         
      // float prev_temp;
      // float prev_load;
@@ -40,6 +41,7 @@ void displayInfo(appManager* appMgr);
 void publishData(appManager* appMgr);
 void updateGPSdata(appManager* appMgr);
 void get_setGPSdata(void * pvParameters);
+void get_temp_data(appManager* appMgr);
 void checkBatteryStatus(appManager* appMgr);
 
 

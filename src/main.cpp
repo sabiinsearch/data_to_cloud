@@ -48,7 +48,12 @@ void setup()
 //xTaskCreate(TaskFunction, "ScaleTask", 4096, NULL, 1, NULL);
 
   Serial.begin(115200);
-  
+
+  analogReadResolution(12); 
+  analogSetAttenuation(ADC_2_5db); // Fixes the ceiling to ~1330mV max
+    // 2. IMPORTANT: Change attenuation to 11dB to cleanly fit the 1.04V pin input
+  analogSetPinAttenuation(BAT_PIN, ADC_11db);
+
   Serial2.begin(9600, SERIAL_8N1, RX_GPS, TX_GPS); // Serial for GPS module on ESP32  
   
   appManager_ctor(&managr);
@@ -68,6 +73,7 @@ void loop()
 {
     
   checkBatteryStatus(&managr);
+  get_temp_data(&managr);
 
   // getSensorData_print_update(&managr);
    if(publish_counter>PUBLILISH_INTERVAL) {      
@@ -81,7 +87,7 @@ void loop()
   //  Serial.print(publish_counter);
   //  Serial.print(F("\t appMgr->publish_check : "));
   //  Serial.println(managr.publish_check);
-
+   
    publishData(&managr);
 
 /*
