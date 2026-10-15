@@ -10,7 +10,7 @@
 #define BAT_MIN_THRESHOLD       7  // Voltage threshold for high battery
 #define BAT_MAX_THRESHOLD       15  // Voltage threshold for low battery
 
-#define voltageDividerRatio     0.248  // Adjust this based on your voltage divider circuit
+#define voltageDividerRatio     0.0909  // Adjust this based on your voltage divider circuit
 #define referenceVoltage        3.6  // Reference voltage for ADC (ESP32 typically uses 3.3V)
 #define adcResolution           4095 // 12-bit ADC resolution for ESP32
 

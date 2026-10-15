@@ -137,20 +137,17 @@ void getSensorData_print_update(appManager* appMgr) {
   delay(50); // Wait for the voltage to stabilize
   
     // 3. Multisample to eradicate ADC noise spikes
-  uint32_t rawSum = 0;
+  uint32_t pinMillivoltsSum = 0;
   const int samples = 64;
   
   for (int i = 0; i < samples; i++) {
-    rawSum += analogRead(BAT_PIN);
+    pinMillivoltsSum += analogReadMilliVolts(BAT_PIN);
     delay(1);
   }
-  float rawAverage = (float)rawSum / samples;
+  float pinMillivolts = (float)pinMillivoltsSum / samples;
 
-  // 4. Calculate voltage at the Pin 
-  // (Using 3.6V max scale ceiling for 11dB attenuation mapping)
-  float pinVoltage = (rawAverage * 3.6) / 4095.0; 
-
-  // 5. Calculate final battery voltage using your divider math
+  // Use the ESP32's calibrated ADC voltage, then undo the divider.
+  float pinVoltage = pinMillivolts / 1000.0;
   float batteryVoltage = pinVoltage / voltageDividerRatio;
 
   // 6. Manual Calibration Factor
