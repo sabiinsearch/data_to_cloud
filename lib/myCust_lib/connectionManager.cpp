@@ -51,7 +51,7 @@ connectionManager * const connectionManager_ctor(connectionManager * const me ) 
 
 /* Function implementation */
 
-  void messageHandler(char* topic, byte* payload, unsigned int length)
+void messageHandler(char* topic, byte* payload, unsigned int length)
   {
    Serial.print("incoming: ");
    Serial.println(topic);
