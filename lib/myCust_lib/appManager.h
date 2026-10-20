@@ -4,8 +4,8 @@
 // #include "app_config.h"
 // #include "receiverBoard.h"
  #include "connectionManager.h"
-#include "HX711.h"
-// #include <HX711_ADC.h>
+ #include <TinyGPSPlus.h>
+
 
 /*Application Manager's attributes*/
 
@@ -13,33 +13,36 @@ typedef struct {
 
      connectionManager* conManager;     
      
-     float prev_hum;
-     float prev_temp;
-     float prev_load;
-     float load_threshold;
-     HX711 scale;
+        bool publish_check;
+        TinyGPSPlus mgr_gps;
+        float location;
+        float longitude;
+        float batteryLevel;
+        float temperature;
+        
+     // float prev_temp;
+     // float prev_load;
+     // float load_threshold;
      
 } appManager;
 
 void appManager_ctor(appManager * const me); // constructor
 
 void initBoard(); 
-void initScreen(); 
-void initDHT(); 
-void displayWelcomeScreen();
-void readyScreen(); 
 void printOnScreen(int, int, int, int, String); 
-//HX711 setLoadCell(appManager*);
 void connectCloud(appManager*);
 void broadcast_appMgr(appManager*);
 void checkConnections_and_reconnect(void * pvParameters);
 void setBoardWithLC(appManager*);
 void getSensorData_print_update(appManager*);
 void loop_mgr(appManager*);
-void checkButtonPressed(appManager*);
-void reset_Load_Cell(appManager*);
-void checkGyro(appManager* appMgr);
-void displayDataOnScreen(appManager* appMgr);
+void getGPSdata(appManager* appMgr);
+void displayInfo(appManager* appMgr);
+void publishData(appManager* appMgr);
+void updateGPSdata(appManager* appMgr);
+void get_setGPSdata(void * pvParameters);
+void get_temp_data(appManager* appMgr);
+void checkBatteryStatus(appManager* appMgr);
 
 
 // functions to set LEDs as per status
