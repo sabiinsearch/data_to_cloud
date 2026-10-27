@@ -55,6 +55,9 @@ void appManager_ctor(appManager * const me) {
   
 /* Function Implementation */
 
+unsigned long int getBoard_ID() {
+     return ESP.getEfuseMac();
+}
 
 void connectCloud(appManager* appMgr) {
       connectWiFi(appMgr->conManager);
@@ -225,10 +228,10 @@ float voltage = analogReadMilliVolts(TEMP_PIN); // Read the voltage in millivolt
 
 // 2. Keep your original LM35 scale step (10mV per degree)
 float tempC = voltage / 10.0; 
-  Serial.print(F("Temp_v & Temp_C: "));
-  Serial.print(voltage);
-  Serial.print(F(" : "));
-  Serial.println(tempC);
+  //Serial.print(F("Temp_v & Temp_C: "));
+  //Serial.print(voltage);
+  //Serial.print(F(" : "));
+ // Serial.println(tempC);
   appMgr->temperature = tempC; // Store the temperature in appManager
 }
 
@@ -245,7 +248,7 @@ void publishData(appManager* appMgr) {
       snprintf(batt_Buff, sizeof(batt_Buff), "%.1f", appMgr->batteryLevel);
       snprintf(temp_Buff, sizeof(temp_Buff), "%.1f", appMgr->temperature);
 
-      doc["UID"] = UNIQUE_ID;
+      doc["UID"] = getBoard_ID();// UNIQUE_ID;
       doc["Lat"] = lat_Buff;
       doc["Lng"] = lng_Buff;
       doc["Battery"] = batt_Buff;

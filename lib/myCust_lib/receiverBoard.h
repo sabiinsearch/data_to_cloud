@@ -6,8 +6,8 @@
 // Sensors Config
 
 
-#define RX_GPS                16
-#define TX_GPS                17
+#define RX_GPS                17
+#define TX_GPS                16
 
 // #define RGB LEDs
 #define HEARTBEAT_LED       27         // Red
@@ -17,8 +17,8 @@
 //user-defined pins
 
 #define BAT_PIN            34
-#define BAT_HIGH_PIN       18
-#define BAT_LOW_PIN        19
+#define BAT_HIGH_PIN       19
+#define BAT_LOW_PIN        18
 #define BAT_SW_PIN         5
 #define TEMP_PIN           35
 
