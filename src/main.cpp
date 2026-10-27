@@ -10,7 +10,7 @@ const float dividerRatio = (R1 + R2) / R2; // This equals 11.0
 
 void setup() {
   Serial.begin(115200);
- analogReadResolution(15);
+ analogReadResolution(12);
   // Use the ESP32's low-voltage ADC range for a ~342 mV sensor signal.
   analogSetPinAttenuation(adcPin, ADC_11db);
 }
