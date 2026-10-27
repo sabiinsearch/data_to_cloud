@@ -224,10 +224,15 @@ void get_setGPSdata(void * pvParameters) {
 
 void get_temp_data(appManager* appMgr) {
 
-float voltage = analogReadMilliVolts(TEMP_PIN); // Read the voltage in millivolts directly
+  const int samples = 16;
+  uint32_t voltageSum = 0;
+  for (int i = 0; i < samples; i++) {
+    voltageSum += analogReadMilliVolts(TEMP_PIN);
+  }
+  float voltage = (float)voltageSum / samples;
 
-// 2. Keep your original LM35 scale step (10mV per degree)
-float tempC = voltage / 10.0; 
+  // LM35 output is 10 mV per degree Celsius.
+  float tempC = voltage / 10.0;
   //Serial.print(F("Temp_v & Temp_C: "));
   //Serial.print(voltage);
   //Serial.print(F(" : "));

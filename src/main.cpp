@@ -1,109 +1,38 @@
-// Libraries for AWS
-#include "secrets.h"             //  for AWS Certificates and Keys
-#include <WiFiClientSecure.h>
-#include <PubSubClient.h>
-#include <ArduinoJson.h>
-#include "WiFi.h"
-#include "app_config.h"     // for Custom Configration
+#include <Arduino.h>
+const int adcPin = 34; // Choose a safe ADC1 pin (GPIO 32-39)
 
-#include <nvs.h>
-#include <nvs_flash.h>
-#include <stdlib.h>
-#include <SPI.h>
+// Resistor values
+const float R1 = 10000.0; 
+const float R2 = 1000.0;
 
-// Others
-#include <TinyGPSPlus.h>
+// Conversion factor back to battery voltage
+const float dividerRatio = (R1 + R2) / R2; // This equals 11.0
 
-// my libraries
-#include "appManager.h"
-#include "receiverBoard.h"
-#include "sensor.h"
-
-int publish_counter=0;
-// my Managers
-appManager managr;
-TinyGPSPlus gps_;
-
-// DHT dht(DHTPIN, DHTTYPE);
-
-// WiFiClientSecure net = WiFiClientSecure();
-// PubSubClient client(net);
-
-void display_test() {
-  if (gps_.location.isValid()) {
-    Serial.print(F("Latitude: "));
-    Serial.println(gps_.location.lat(), 6);
-    Serial.print(F("Longitude: "));
-    Serial.println(gps_.location.lng(), 6);
-  } else {
-    Serial.print(F("Location: Not Available (Searching for satellites...)"));
-  }
-  Serial.println();
-}
-
-void setup()
-{
-
-  // Change from 2048 to 4096 or higher
-//xTaskCreate(TaskFunction, "ScaleTask", 4096, NULL, 1, NULL);
-
+void setup() {
   Serial.begin(115200);
-
-  analogReadResolution(12); 
-  analogSetAttenuation(ADC_2_5db); // Fixes the ceiling to ~1330mV max
-    // 2. IMPORTANT: Change attenuation to 11dB to cleanly fit the 1.04V pin input
-  analogSetPinAttenuation(BAT_PIN, ADC_11db);
-
-  Serial2.begin(9600, SERIAL_8N1, RX_GPS, TX_GPS); // Serial for GPS module on ESP32  
-  
-  appManager_ctor(&managr);
-  // assinig the GPS task in second core of ESP32
-  xTaskCreatePinnedToCore( get_setGPSdata, "GPS_Task", 4096, &managr, 1, NULL, 1);
-
-     
-//    Serial.println("first task created ");
-    // Initiating Manager
-  
-  
-  Serial.println("All Systems Initialized..");
- 
+ analogReadResolution(15);
+  // Use the ESP32's low-voltage ADC range for a ~342 mV sensor signal.
+  analogSetPinAttenuation(adcPin, ADC_11db);
 }
 
-void loop()
-{
-    
-  checkBatteryStatus(&managr);
-  get_temp_data(&managr);
-
-  // getSensorData_print_update(&managr);
-   if(publish_counter>PUBLILISH_INTERVAL) {      
-      managr.publish_check = true;
-      publish_counter = 0;
-   } else {      
-      managr.publish_check = false;
-   }
-   publish_counter++;
-  //  Serial.print("Publish Counter : ");
-  //  Serial.print(publish_counter);
-  //  Serial.print(F("\t appMgr->publish_check : "));
-  //  Serial.println(managr.publish_check);
-   
-   publishData(&managr);
-
-/*
- while (Serial2.available() > 0) {
-    if (gps_.encode(Serial2.read())) {
-      display_test();
-    }
-  }
-
-  if (millis() > 5000 && gps_.charsProcessed() < 10) {
-    Serial.println(F("No GPS detected: check wiring."));
-    delay(5000);
-  }
- */  
-  loop_mgr(&managr);
-  //Serial.println(F("==>> in loop() : main.cpp"));
-  //delay(1000);
+void loop() {
+  // Read raw ADC value (0 - 4095)
+  int rawADC = analogRead(adcPin);
+  
+  // Use the ESP32 ADC calibration for the configured 11 dB attenuation.
+  //uint32_t pinMillivolts = analogReadMilliVolts(adcPin);
+  float pinVoltage = (rawADC / 4095.0) * 3.3;
+  
+  // Calculate original battery voltage
+  float batteryVoltage = pinVoltage * dividerRatio;
+  
+  Serial.print("Raw ADC counts: ");
+  Serial.print(rawADC);
+  Serial.print(" | Calibrated pin voltage: ");
+  Serial.print(pinVoltage);
+  Serial.print("V | Battery Volts: ");
+  Serial.print(batteryVoltage);
+  Serial.println("V");
+  
+  delay(1000);
 }
-
