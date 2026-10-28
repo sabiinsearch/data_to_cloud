@@ -276,16 +276,15 @@ void publishData(appManager* appMgr) {
       char jsonBuffer[512]; // Increased buffer size
       serializeJson(doc, jsonBuffer); // print to client
       
-      if(!(appMgr->conManager->client.connected())) {
-
-           connectAWS(appMgr->conManager); 
-      }
       
       // Publish only if publish_check is true
          if(appMgr->publish_check) {
-         publishOnMqtt(jsonBuffer, appMgr->conManager);
-         Serial.print(F("Published GPS data to AWS IoT "));
-         Serial.println(jsonBuffer);
+          if(!(appMgr->conManager->client.connected())) {
+           connectAWS(appMgr->conManager); 
+           publishOnMqtt(jsonBuffer, appMgr->conManager);
+           Serial.print(F("Published GPS data to AWS IoT "));
+           Serial.println(jsonBuffer);
+          }          
          }
 }
 

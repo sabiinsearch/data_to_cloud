@@ -18,10 +18,10 @@
 //  Mqtt Configurations 
     #define THINGNAME               "truck-1"        // Change this
     #define AWS_ENDPOINT            "awmminjiukh34-ats.iot.ap-south-1.amazonaws.com"   // AWS MQTT Broker URL  
-    #define AWS_IOT_PUBLISH_TOPIC   "trucks/truck-1/temparature"           //change this
-    #define AWS_IOT_SUBSCRIBE_TOPIC "trucks/truck-1/temparature"           //change this
+    #define AWS_IOT_PUBLISH_TOPIC   "trucks/truck-1/temperature"           //change this
+    #define AWS_IOT_SUBSCRIBE_TOPIC "trucks/truck-1/temperature"           //change this
     
-    #define PUBLILISH_INTERVAL  200       // seconds  // actually 16 seconds 
+    #define PUBLILISH_INTERVAL  100       // seconds  // actually 16 seconds 
     #define TIMEOUT_INTERVAL    120       // seconds
    // #define DISPLAY_TIME        10000      // milliseconds  
 #endif
