@@ -253,21 +253,23 @@ void publishData(appManager* appMgr) {
       snprintf(batt_Buff, sizeof(batt_Buff), "%.1f", appMgr->batteryLevel);
       snprintf(temp_Buff, sizeof(temp_Buff), "%.1f", appMgr->temperature);
 
-      doc["UID"] = getBoard_ID();// UNIQUE_ID;
-      doc["Lat"] = lat_Buff;
-      doc["Lng"] = lng_Buff;
-      doc["Battery"] = batt_Buff;
-      doc["Temp"] = temp_Buff;
-
       // Get current time
       struct tm timeinfo;
       if(getLocalTime(&timeinfo)){
         char timeStringBuff[50];
         strftime(timeStringBuff, sizeof(timeStringBuff), "%Y-%m-%d %H:%M:%S", &timeinfo);
-        doc["time"] = timeStringBuff;
+        doc["ts"] = timeStringBuff;
       } else {
-        doc["time"] = "NTP_SYNC_FAILED";
-      }      
+        doc["ts"] = "NTP_SYNC_FAILED";
+      } 
+      
+      doc["temp"] = temp_Buff;
+      doc["unit"] = "C";//getBoard_ID();// UNIQUE_ID;
+      doc["Lat"] = lat_Buff;
+      doc["Lng"] = lng_Buff;
+     // doc["Battery"] = batt_Buff;
+      
+     
       // doc["Alt"] = appMgr->mgr_gps.altitude.meters();
     
 

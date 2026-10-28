@@ -30,8 +30,10 @@ PubSubClient pub_sub_client(net);
 
 WiFiManager wm; // WiFi Manager 
 
-String sub_topic = AWS_IOT_SUBSCRIBE_TOPIC;
-String pub_topic = AWS_IOT_PUBLISH_TOPIC;
+       
+ String sub_topic = AWS_IOT_SUBSCRIBE_TOPIC;      
+ String pub_topic = AWS_IOT_PUBLISH_TOPIC;
+
 char server[50] = AWS_ENDPOINT;
 
 
@@ -65,6 +67,10 @@ void messageHandler(char* topic, byte* payload, unsigned int length)
 void publishOnMqtt(char* data, connectionManager* con) {
    char jsonBuffer_to_cloud[512];
    strcpy(jsonBuffer_to_cloud, data);
+
+  //  String pub_topic = "trucks/";
+  //  pub_topic += THINGNAME;
+  //  pub_topic += "/temparature";  // AWS_IOT_PUBLISH_TOPIC;
       
   // client.publish(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
    pub_sub_client.publish(AWS_IOT_PUBLISH_TOPIC, jsonBuffer_to_cloud);
@@ -191,7 +197,6 @@ void resetWifi(connectionManager * con) {
     wm.resetSettings(); // reset settings - wipe stored credentials for testing, these are stored by the esp library
     digitalWrite(WIFI_LED,HIGH);
 }
-
 
 
 
