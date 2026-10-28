@@ -265,8 +265,8 @@ void publishData(appManager* appMgr) {
       
       doc["temp"] = temp_Buff;
       doc["unit"] = "C";//getBoard_ID();// UNIQUE_ID;
-      doc["Lat"] = lat_Buff;
-      doc["Lng"] = lng_Buff;
+      doc["lat"] = lat_Buff;
+      doc["lng"] = lng_Buff;
      // doc["Battery"] = batt_Buff;
       
      
