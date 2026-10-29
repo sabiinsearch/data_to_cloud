@@ -88,7 +88,7 @@ void loop()
   //  Serial.print(publish_counter);
   //  Serial.print(F("\t appMgr->publish_check : "));
   //  Serial.println(managr.publish_check);
-   
+  // Serial.print(F("==>> in loop() : main.cpp"));
    publishData(&managr);
 
 /*

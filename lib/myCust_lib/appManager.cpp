@@ -262,29 +262,28 @@ void publishData(appManager* appMgr) {
       } else {
         doc["ts"] = "NTP_SYNC_FAILED";
       } 
-      
-      doc["temp"] = temp_Buff;
-      doc["unit"] = "C";//getBoard_ID();// UNIQUE_ID;
+/* Comment one */      
+      doc["temp"] = temp_Buff;      
+      doc["bat"] = batt_Buff;      
       doc["lat"] = lat_Buff;
       doc["lng"] = lng_Buff;
-     // doc["Battery"] = batt_Buff;
-      
-     
+
       // doc["Alt"] = appMgr->mgr_gps.altitude.meters();
     
 
       char jsonBuffer[512]; // Increased buffer size
       serializeJson(doc, jsonBuffer); // print to client
       
-      
+      Serial.print(F("publish_check: "));
+      Serial.println(appMgr->publish_check);
       // Publish only if publish_check is true
          if(appMgr->publish_check) {
-          if(!(appMgr->conManager->client.connected())) {
+    //      if(!(appMgr->conManager->client.connected())) {
            connectAWS(appMgr->conManager); 
            publishOnMqtt(jsonBuffer, appMgr->conManager);
            Serial.print(F("Published GPS data to AWS IoT "));
            Serial.println(jsonBuffer);
-          }          
+    //      }          
          }
 }
 
@@ -293,7 +292,7 @@ void publishData(appManager* appMgr) {
   while(Serial2.available() > 0) {     
     //   Serial.write(c); // Uncomment this line to see raw GPS data in Serial Monitor
       if(appMgr->mgr_gps.encode(Serial2.read())) {
-           displayInfo(appMgr);
+          // displayInfo(appMgr);
       } // Feed byte to the parser
       
   }
