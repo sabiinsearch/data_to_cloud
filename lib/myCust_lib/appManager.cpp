@@ -190,17 +190,17 @@ void getSensorData_print_update(appManager* appMgr) {
  void displayInfo(appManager* appMgr)
 { 
   if (appMgr->mgr_gps.location.isValid()) {
-    Serial.print(F("Latitude: ")); 
-    Serial.println(appMgr->mgr_gps.location.lat(), 6);
-    Serial.print(F("Longitude: ")); 
-    Serial.println(appMgr->mgr_gps.location.lng(), 6); 
+    // Serial.print(F("Latitude: ")); 
+    // Serial.println(appMgr->mgr_gps.location.lat(), 6);
+    // Serial.print(F("Longitude: ")); 
+    // Serial.println(appMgr->mgr_gps.location.lng(), 6); 
 
-    Serial.println("GPS Data Updated in appManager: ");
+    //Serial.println("GPS Data Updated in appManager: ");
   } else {
     Serial.print(F("Location: Not Available (Searching for satellites...)"));
   }
 
-  Serial.println();
+  //Serial.println();
   delay(1000);
 
           //          Serial.print("Published : ");
@@ -291,10 +291,10 @@ void publishData(appManager* appMgr) {
   // Read incoming data from GPS module
   while(Serial2.available() > 0) {     
     //   Serial.write(c); // Uncomment this line to see raw GPS data in Serial Monitor
-      //if(appMgr->mgr_gps.encode(Serial2.read())) {
-      appMgr->mgr_gps.encode(Serial2.read());
-        //   displayInfo(appMgr);
-      //} // Feed byte to the parser
+      if(appMgr->mgr_gps.encode(Serial2.read())) {
+      //appMgr->mgr_gps.encode(Serial2.read());
+          displayInfo(appMgr);
+      } // Feed byte to the parser
       
   }
 
