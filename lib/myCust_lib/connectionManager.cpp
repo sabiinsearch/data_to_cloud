@@ -124,7 +124,7 @@ void connectAWS(connectionManager * con) {
   }
 
   // Subscribe to a topic
-  pub_sub_client.subscribe(AWS_IOT_SUBSCRIBE_TOPIC);
+ // pub_sub_client.subscribe(AWS_IOT_SUBSCRIBE_TOPIC);
 
   Serial.println("AWS IoT Connected!");
 }
