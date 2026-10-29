@@ -267,15 +267,15 @@ void publishData(appManager* appMgr) {
       doc["bat"] = batt_Buff;      
       doc["lat"] = lat_Buff;
       doc["lng"] = lng_Buff;
-
+      
       // doc["Alt"] = appMgr->mgr_gps.altitude.meters();
     
 
       char jsonBuffer[512]; // Increased buffer size
       serializeJson(doc, jsonBuffer); // print to client
       
-      Serial.print(F("publish_check: "));
-      Serial.println(appMgr->publish_check);
+//      Serial.print(F("publish_check: "));
+//      Serial.println(appMgr->publish_check);
       // Publish only if publish_check is true
          if(appMgr->publish_check) {
     //      if(!(appMgr->conManager->client.connected())) {
@@ -291,9 +291,10 @@ void publishData(appManager* appMgr) {
   // Read incoming data from GPS module
   while(Serial2.available() > 0) {     
     //   Serial.write(c); // Uncomment this line to see raw GPS data in Serial Monitor
-      if(appMgr->mgr_gps.encode(Serial2.read())) {
-          // displayInfo(appMgr);
-      } // Feed byte to the parser
+      //if(appMgr->mgr_gps.encode(Serial2.read())) {
+      appMgr->mgr_gps.encode(Serial2.read());
+        //   displayInfo(appMgr);
+      //} // Feed byte to the parser
       
   }
 
