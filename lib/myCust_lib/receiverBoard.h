@@ -6,8 +6,8 @@
 // Sensors Config
 
 
-#define RX_GPS                17
-#define TX_GPS                16
+#define RX_GPS                16
+#define TX_GPS                17
 
 // #define RGB LEDs
 #define HEARTBEAT_LED       27         // Red

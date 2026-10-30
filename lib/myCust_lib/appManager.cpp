@@ -302,7 +302,7 @@ while(Hw_Serial.available() > 0) {
       //} // Feed byte to the parser
       
   }
-
+  displayInfo(appMgr);
   // If 5 seconds pass with no data
   if (millis() > 5000 && appMgr->mgr_gps.charsProcessed() < 10) {
     Serial.println(F("No GPS data received: check wiring"));
