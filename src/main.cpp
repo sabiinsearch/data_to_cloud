@@ -23,6 +23,7 @@ int publish_counter=0;
 // my Managers
 appManager managr;
 TinyGPSPlus gps_;
+//HardwareSerial Hw_Serial(2); // Use UART2 on ESP32 (GPIO 16 = RX2, GPIO 17 = TX2)
 
 // DHT dht(DHTPIN, DHTTYPE);
 
@@ -55,14 +56,13 @@ void setup()
   analogSetPinAttenuation(BAT_PIN, ADC_11db);
   analogSetPinAttenuation(TEMP_PIN, ADC_0db);
 
-  Serial2.begin(9600, SERIAL_8N1, RX_GPS, TX_GPS); // Serial for GPS module on ESP32  
-  
+  //
   appManager_ctor(&managr);
   // assinig the GPS task in second core of ESP32
   xTaskCreatePinnedToCore( get_setGPSdata, "GPS_Task", 4096, &managr, 1, NULL, 1);
 
      
-//    Serial.println("first task created ");
+    Serial.println("Task created ");
     // Initiating Manager
   
   

@@ -28,7 +28,7 @@
 #include "soc/rtc.h"
 #include "esp32-hal-cpu.h"
 
-//HardwareSerial gpsSerial(2);
+HardwareSerial Hw_Serial(2); // Use UART2 on ESP32 (GPIO 16 = RX2, GPIO 17 = TX2)
 
 connectionManager conManagerr;
 
@@ -46,8 +46,9 @@ void appManager_ctor(appManager * const me) {
   initBoard();
     // Start I2C on custom pins (for ESP32)
  // Wire.begin(SDA, SCL);
-  // Serial2.begin(9600, SERIAL_8N1, RX_GPS, TX_GPS); // Serial for GPS module on ESP32  
+  Hw_Serial.begin(9600, SERIAL_8N1, TX_GPS, RX_GPS); // Serial for GPS module on ESP32    
   Serial.println("NEO-6M GPS initialized. Waiting for satellite lock...");
+ 
   me->publish_check = false;
    me->conManager = connectionManager_ctor(&conManagerr);
   Serial.println("Connection Manager set with App Manager");
@@ -189,15 +190,15 @@ void getSensorData_print_update(appManager* appMgr) {
 
  void displayInfo(appManager* appMgr)
 { 
-  if (appMgr->mgr_gps.location.isValid()) {
-    // Serial.print(F("Latitude: ")); 
-    // Serial.println(appMgr->mgr_gps.location.lat(), 6);
-    // Serial.print(F("Longitude: ")); 
-    // Serial.println(appMgr->mgr_gps.location.lng(), 6); 
+  if (appMgr->mgr_gps.location.isUpdated()) {
+    Serial.print(F("Latitude: ")); 
+    Serial.println(appMgr->mgr_gps.location.lat(), 6);
+    Serial.print(F("Longitude: ")); 
+    Serial.println(appMgr->mgr_gps.location.lng(), 6); 
 
-    //Serial.println("GPS Data Updated in appManager: ");
+    Serial.println("GPS Data Updated in appManager: ");
   } else {
-    Serial.print(F("Location: Not Available (Searching for satellites...)"));
+//    Serial.print(F("Location: Not Available (Searching for satellites...)"));
   }
 
   //Serial.println();
@@ -212,8 +213,10 @@ void getSensorData_print_update(appManager* appMgr) {
 void get_setGPSdata(void * pvParameters) {
   
   appManager* appMgr = (appManager*) pvParameters;
-  getGPSdata(appMgr);
-  vTaskDelay(100 / portTICK_PERIOD_MS); // Delay for a short period to yield to other tasks
+  for(;;) {
+    getGPSdata(appMgr);
+    vTaskDelay(50 / portTICK_PERIOD_MS); // Delay for a short period to yield to other tasks
+  }
 
   // set GPS data in appManager
 //  appMgr->location = appMgr->mgr_gps.location.lat();
@@ -288,13 +291,15 @@ void publishData(appManager* appMgr) {
 }
 
  void getGPSdata(appManager* appMgr) {
+ 
   // Read incoming data from GPS module
-  while(Serial2.available() > 0) {     
-    //   Serial.write(c); // Uncomment this line to see raw GPS data in Serial Monitor
-      if(appMgr->mgr_gps.encode(Serial2.read())) {
-      //appMgr->mgr_gps.encode(Serial2.read());
-          displayInfo(appMgr);
-      } // Feed byte to the parser
+//  Serial.print(F("Entering while loop to read GPS data on Core:1 >> "));
+while(Hw_Serial.available() > 0) {  
+      char c = Hw_Serial.read();   
+      appMgr->mgr_gps.encode(c);
+          //displayInfo(appMgr);
+          Serial.print(F("."));
+      //} // Feed byte to the parser
       
   }
 
@@ -303,6 +308,7 @@ void publishData(appManager* appMgr) {
     Serial.println(F("No GPS data received: check wiring"));
     delay(5000);
   }
+
  }
  
  void initBoard() {  

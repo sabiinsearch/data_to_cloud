@@ -5,6 +5,7 @@
 // #include "receiverBoard.h"
  #include "connectionManager.h"
  #include <TinyGPSPlus.h>
+ 
 
 
 /*Application Manager's attributes*/
@@ -14,7 +15,7 @@ typedef struct {
      connectionManager* conManager;     
      
         bool publish_check;
-        TinyGPSPlus mgr_gps;
+        TinyGPSPlus mgr_gps;        
         float location;
         float longitude;
         float batteryLevel;
