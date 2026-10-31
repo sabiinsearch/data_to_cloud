@@ -4,9 +4,9 @@
 
 #include "Arduino.h"
 
-#define UNIQUE_ID              "T1"  // Change this to a unique identifier for your device
+#define UNIQUE_ID              "T4"  // Change this to a unique identifier for your device
 
-#define BAT_MIN_THRESHOLD       7  // Voltage threshold for high battery
+#define BAT_MIN_THRESHOLD       10  // Voltage threshold for high battery
 #define BAT_MAX_THRESHOLD       15  // Voltage threshold for low battery
 
 #define voltageDividerRatio     0.0909  // Adjust this based on your voltage divider circuit
