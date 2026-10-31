@@ -154,6 +154,9 @@ void getSensorData_print_update(appManager* appMgr) {
   float pinVoltage = pinMillivolts / 1000.0;
   float batteryVoltage = pinVoltage / voltageDividerRatio;
 
+  Serial.print(F("Bat: "));
+  Serial.print(batteryVoltage);
+
   // 6. Manual Calibration Factor
   // Measure your real battery using a voltmeter. If the serial output reads 4.0V 
   // but your multimeter says 4.15V, adjust this factor (e.g., 4.15 / 4.0 = 1.0375)
@@ -229,18 +232,31 @@ void get_temp_data(appManager* appMgr) {
 
   const int samples = 16;
   uint32_t voltageSum = 0;
+  
   for (int i = 0; i < samples; i++) {
-    voltageSum += analogReadMilliVolts(TEMP_PIN);
+    voltageSum += analogReadMilliVolts(TEMP_PIN);  
+
   }
+
   float voltage = (float)voltageSum / samples;
 
   // LM35 output is 10 mV per degree Celsius.
   float tempC = voltage / 10.0;
+
+  Serial.print(F("  Temp : "));
+  Serial.println(tempC);
+
+  //float map(voltage, fromLow, fromHigh, toLow, toHigh);
+
+  //long map(value, fromLow, fromHigh, toLow, toHigh);
+
   //Serial.print(F("Temp_v & Temp_C: "));
   //Serial.print(voltage);
   //Serial.print(F(" : "));
  // Serial.println(tempC);
-  appMgr->temperature = tempC; // Store the temperature in appManager
+
+  appMgr->temperature = tempC; // Store the temperature in appManager  
+
 }
 
 void publishData(appManager* appMgr) {
