@@ -271,7 +271,8 @@ void publishData(appManager* appMgr) {
       snprintf(lng_Buff, sizeof(lng_Buff), "%.1f", appMgr->mgr_gps.location.lng());
       snprintf(batt_Buff, sizeof(batt_Buff), "%.1f", appMgr->batteryLevel);
       snprintf(temp_Buff, sizeof(temp_Buff), "%.1f", appMgr->temperature);
-
+      
+       doc["UID"] = UNIQUE_ID;  // Add unique ID to the JSON document
       // Get current time
       struct tm timeinfo;
       if(getLocalTime(&timeinfo)){
